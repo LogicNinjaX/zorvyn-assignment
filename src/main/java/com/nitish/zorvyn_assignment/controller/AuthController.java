@@ -33,13 +33,13 @@ public class AuthController {
         var authToken = authService.login(request.username(), request.password());
         LoginResponse response = new LoginResponse(authToken, AuthStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse<>(HttpStatus.OK.value(), "Login successful", response, servletRequest));
+                .body(ApiResponse.ok("Login successful", response, servletRequest));
     }
 
     @PostMapping(path = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody UserRegisterRequest request, HttpServletRequest servletRequest) {
         authService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(HttpStatus.CREATED.value(), "User registration successful", null, servletRequest));
+                .body(ApiResponse.created("User registration successful", null, servletRequest));
     }
 }
