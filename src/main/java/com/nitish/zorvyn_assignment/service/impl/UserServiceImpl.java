@@ -89,12 +89,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteUser(UUID userId, boolean delete){
+    public void deleteUser(UUID userId){
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if(user.getDeleted() != delete){
-            user.setDeleted(delete);
+        if(!user.isDeleted()){
+            user.setDeleted(true);
         }
 
         userRepository.save(user);

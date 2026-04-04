@@ -20,7 +20,7 @@ public interface UserService {
 
     void updateUserStatus(UUID userId, UserStatus status);
 
-    void deleteUser(UUID userId, boolean delete);
+    void deleteUser(UUID userId);
 
     void updateUserRole(UUID userId, UserRole role);
 }
