@@ -1,6 +1,7 @@
 package com.nitish.zorvyn_assignment.dto.response;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,14 @@ public class ApiResponse<T> {
         this.message = message;
         this.data = data;
         this.path = request.getRequestURI();
+    }
+
+    public static<T> ApiResponse<T> ok(String message, T data, HttpServletRequest servletRequest){
+        return new ApiResponse<>(HttpStatus.OK.value(), message, data, servletRequest);
+    }
+
+    public static<T> ApiResponse<T> created(String message, T data, HttpServletRequest servletRequest){
+        return new ApiResponse<>(HttpStatus.CREATED.value(), message, data, servletRequest);
     }
 
     public LocalDateTime getTimestamp() {
