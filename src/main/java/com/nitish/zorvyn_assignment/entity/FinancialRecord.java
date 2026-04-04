@@ -1,5 +1,6 @@
 package com.nitish.zorvyn_assignment.entity;
 
+import com.nitish.zorvyn_assignment.enums.Category;
 import com.nitish.zorvyn_assignment.enums.RecordType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,10 +22,12 @@ public class FinancialRecord {
     private BigDecimal amount;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private RecordType type;
 
     @Column(nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column(nullable = false)
     private LocalDateTime timeStamp;
@@ -68,11 +71,11 @@ public class FinancialRecord {
         this.type = type;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

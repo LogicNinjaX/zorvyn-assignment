@@ -51,7 +51,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserStatus status;
+    private UserStatus status = UserStatus.ACTIVE;
 
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<FinancialRecord> financialRecords = new ArrayList<>();
