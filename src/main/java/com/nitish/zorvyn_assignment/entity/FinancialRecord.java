@@ -36,7 +36,7 @@ public class FinancialRecord {
     private User createdBy;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -101,11 +101,15 @@ public class FinancialRecord {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
+    }
+
+    public boolean getDeleted() {
+        return deleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     public LocalDateTime getCreatedAt() {
