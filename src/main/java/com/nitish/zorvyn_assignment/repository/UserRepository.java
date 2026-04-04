@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Modifying
     @Query("""
-            UPDATE u FROM User u
+            UPDATE User u
             SET u.status = :status
             WHERE u.userId = :userId
             """)
@@ -35,9 +35,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Modifying
     @Query("""
-             UPDATE u FROM User u
+             UPDATE User u
              SET u.role = :role
              WHERE u.userId = :userId
             """)
     int updateUserRole(UUID userId, UserRole role);
+
+    Optional<User> findByUsername(String username);
 }
