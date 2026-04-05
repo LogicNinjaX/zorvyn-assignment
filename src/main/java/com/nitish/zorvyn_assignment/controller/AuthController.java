@@ -1,6 +1,7 @@
 package com.nitish.zorvyn_assignment.controller;
 
 
+import com.nitish.zorvyn_assignment.controller.doc.AuthApiDoc;
 import com.nitish.zorvyn_assignment.dto.request.LoginRequest;
 import com.nitish.zorvyn_assignment.dto.request.UserRegisterRequest;
 import com.nitish.zorvyn_assignment.dto.response.ApiResponse;
@@ -20,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthApiDoc {
 
     private final AuthService authService;
 
@@ -29,14 +30,16 @@ public class AuthController {
     }
 
     @PostMapping(path = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletRequest servletRequest) {
         var authToken = authService.login(request.username(), request.password());
-        LoginResponse response = new LoginResponse(authToken, AuthStatus.SUCCESS);
+        LoginResponse response = new LoginResponse(authToken, AuthStatus.SUCCESS.toString());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.ok("Login successful", response, servletRequest));
     }
 
     @PostMapping(path = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody UserRegisterRequest request, HttpServletRequest servletRequest) {
         authService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED)

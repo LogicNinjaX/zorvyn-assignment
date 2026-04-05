@@ -1,5 +1,6 @@
 package com.nitish.zorvyn_assignment.controller;
 
+import com.nitish.zorvyn_assignment.controller.doc.TransactionApiDoc;
 import com.nitish.zorvyn_assignment.dto.request.TransactionCreateRequest;
 import com.nitish.zorvyn_assignment.dto.request.TransactionUpdateRequest;
 import com.nitish.zorvyn_assignment.dto.response.ApiResponse;
@@ -11,6 +12,7 @@ import com.nitish.zorvyn_assignment.service.FinancialRecordService;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/transactions")
-public class TransactionController {
+public class TransactionController implements TransactionApiDoc {
 
     private final FinancialRecordService recordService;
 
@@ -33,9 +35,10 @@ public class TransactionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<TransactionCreateResponse>> createTransaction
             (
-                    @RequestBody TransactionCreateRequest request,
+                    @Valid @RequestBody TransactionCreateRequest request,
                     @AuthenticationPrincipal CustomUserDetails userDetails,
                     HttpServletRequest servletRequest
             )
@@ -46,8 +49,9 @@ public class TransactionController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN', 'ANALYST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ANALYST')")
     @GetMapping(path = "/{recordId}", produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<TransactionDetailsResponse>> getTransactionById
             (
                     @PathVariable UUID recordId,
@@ -58,8 +62,9 @@ public class TransactionController {
         return ResponseEntity.ok(ApiResponse.ok("Transaction details fetched successfully", response, servletRequest));
     }
 
-    @PreAuthorize("hasRole('ADMIN', 'ANALYST')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ANALYST')")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<PageResponse<TransactionDetailsResponse>>> getAllTransactions
             (
                 Pageable pageable,
@@ -73,10 +78,11 @@ public class TransactionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping(path = "/{recordId}", consumes = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<Void> updateTransaction
             (
                     @PathVariable UUID recordId,
-                    @RequestBody TransactionUpdateRequest request,
+                    @Valid @RequestBody TransactionUpdateRequest request,
                     HttpServletRequest servletRequest
             )
     {
@@ -87,6 +93,7 @@ public class TransactionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{recordId}")
+    @Override
     public ResponseEntity<Void> deleteTransaction
             (
                     @PathVariable UUID recordId,

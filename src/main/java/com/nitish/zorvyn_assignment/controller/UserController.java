@@ -1,5 +1,6 @@
 package com.nitish.zorvyn_assignment.controller;
 
+import com.nitish.zorvyn_assignment.controller.doc.UserApiDoc;
 import com.nitish.zorvyn_assignment.dto.request.UpdateRoleRequest;
 import com.nitish.zorvyn_assignment.dto.request.UpdateStatusRequest;
 import com.nitish.zorvyn_assignment.dto.request.UserUpdateRequest;
@@ -12,6 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "/api/v1/users")
 @PreAuthorize("hasRole('ADMIN')")
-public class UserController {
+public class UserController implements UserApiDoc {
 
     private final UserService userService;
 
@@ -31,6 +33,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}", produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<UserDetailsResponse>> getUserById
             (
                     @PathVariable UUID userId, HttpServletRequest servletRequest
@@ -43,6 +46,7 @@ public class UserController {
 
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<PageResponse<UserDetailsResponse>>> getAllUsers
             (
                     Pageable pageable,
@@ -55,10 +59,11 @@ public class UserController {
 
 
     @PatchMapping(path = "/{userId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<ApiResponse<UserUpdateResponse>> updateUserDetails
             (
                     @PathVariable UUID userId,
-                    @RequestBody UserUpdateRequest request,
+                    @Valid @RequestBody UserUpdateRequest request,
                     HttpServletRequest servletRequest
             )
     {
@@ -69,10 +74,11 @@ public class UserController {
 
 
     @PatchMapping(path = "/{userId}/status", consumes = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<Void> updateUserStatus
             (
                     @PathVariable UUID userId,
-                    @RequestBody UpdateStatusRequest request
+                    @Valid @RequestBody UpdateStatusRequest request
             )
     {
         userService.updateUserStatus(userId, request.status());
@@ -80,10 +86,11 @@ public class UserController {
     }
 
     @PatchMapping(path = "/{userId}/role", consumes = APPLICATION_JSON_VALUE)
+    @Override
     public ResponseEntity<Void> updateUserRole
             (
                     @PathVariable UUID userId,
-                    @RequestBody UpdateRoleRequest request
+                    @Valid @RequestBody UpdateRoleRequest request
             )
     {
         userService.updateUserRole(userId, request.role());
@@ -91,6 +98,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{userId}")
+    @Override
     public ResponseEntity<Void> deleteUser
             (
                     @PathVariable UUID userId
