@@ -1,5 +1,6 @@
 package com.nitish.zorvyn_assignment.dto.request;
 
+import com.nitish.zorvyn_assignment.enums.Category;
 import com.nitish.zorvyn_assignment.enums.RecordType;
 
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ public record TransactionCreateRequest
         (
                 BigDecimal amount,
                 RecordType type,
-                String category,
+                Category category,
                 LocalDateTime timeStamp,
                 String description
         ) { }
