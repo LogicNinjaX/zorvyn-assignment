@@ -46,6 +46,7 @@ public class TransactionController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN', 'ANALYST')")
     @GetMapping(path = "/{recordId}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<TransactionDetailsResponse>> getTransactionById
             (
@@ -57,6 +58,7 @@ public class TransactionController {
         return ResponseEntity.ok(ApiResponse.ok("Transaction details fetched successfully", response, servletRequest));
     }
 
+    @PreAuthorize("hasRole('ADMIN', 'ANALYST')")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<PageResponse<TransactionDetailsResponse>>> getAllTransactions
             (
