@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "api/v1/transactions")
+@RequestMapping(path = "/api/v1/transactions")
 public class TransactionController {
 
     private final FinancialRecordService recordService;
