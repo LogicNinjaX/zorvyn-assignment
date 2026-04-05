@@ -137,6 +137,10 @@ public class User {
         this.financialRecords = financialRecords;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public boolean getDeleted() {
         return deleted;
     }
