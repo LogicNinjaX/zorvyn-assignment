@@ -7,6 +7,8 @@ import com.nitish.zorvyn_assignment.dto.response.TransactionCreateResponse;
 import com.nitish.zorvyn_assignment.dto.response.TransactionDetailsResponse;
 import com.nitish.zorvyn_assignment.entity.FinancialRecord;
 import com.nitish.zorvyn_assignment.entity.User;
+import com.nitish.zorvyn_assignment.enums.Category;
+import com.nitish.zorvyn_assignment.exception.InvalidCategoryException;
 import com.nitish.zorvyn_assignment.exception.TransactionNotFoundException;
 import com.nitish.zorvyn_assignment.exception.UserNotFoundException;
 import com.nitish.zorvyn_assignment.repository.FinancialRecordRepository;
@@ -18,10 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@Service
 public class FinancialRecordServiceImpl implements FinancialRecordService {
 
     private static final Logger logger = LoggerFactory.getLogger(FinancialRecordServiceImpl.class);
@@ -39,6 +43,12 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
     @Transactional
     @Override
     public TransactionCreateResponse createTransaction(UUID userId, TransactionCreateRequest request) {
+        Category category = request.category();
+        if (category.getRecordType() != request.type()){
+            throw new InvalidCategoryException("Use a valid category to transaction type: "+request.type());
+        }
+
+
         User createdBy = userRepository.findUserById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         FinancialRecord record = recordMapper.toRecord(request);
